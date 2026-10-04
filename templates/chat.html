@@ -1,108 +1,227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical AI Assistant</title>
-    <!-- Tailwind CSS CDN -->
+    <title>MediMind AI — Clinical RAG Assistant</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- jQuery & Marked.js for Markdown Rendering -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .custom-scroll::-webkit-scrollbar { width: 5px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+        .glass-panel { background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(12px); }
+        .markdown-content p { margin-bottom: 0.5rem; }
+        .markdown-content ul { list-style-type: disc; padding-left: 1.25rem; margin-bottom: 0.5rem; }
+        .markdown-content ol { list-style-type: decimal; padding-left: 1Let's elevate your UI to a production-grade AI dashboard. We can upgrade the single-card layout into a sleek, full-screen dashboard featuring a collapsible sidebar with sample prompt chips, floating action buttons, animated mesh background gradients, markdown rendering, message timestamps, and a copy-to-clipboard button on every bot answer.
+
+---
+
+### Updated `templates/chat.html`
+
+Replace everything in **`templates/chat.html`** with this updated code:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedRAG AI — Clinical Assistant</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)">
+    <!-- Google Fonts -->
+    <link href="[https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap](https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap)" rel="stylesheet">
+    <!-- Marked.js for Markdown Parsing -->
+    <script src="[https://cdn.jsdelivr.net/npm/marked/marked.min.js](https://cdn.jsdelivr.net/npm/marked/marked.min.js)"></script>
+    <script src="[https://code.jquery.com/jquery-3.6.0.min.js](https://code.jquery.com/jquery-3.6.0.min.js)"></script>
 
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
+        .mesh-gradient {
+            background-color: #0b1120;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(13, 148, 136, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.12) 0px, transparent 50%);
+        }
         .chat-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 5px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: transparent;
         }
         .chat-scroll::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1;
+            background-color: #334155;
             border-radius: 9999px;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .chat-bubble {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="bg-slate-900 h-screen flex items-center justify-center p-2 sm:p-6">
+<body class="mesh-gradient h-screen flex text-slate-100 overflow-hidden">
 
-    <!-- Main Container -->
-    <div class="w-full max-w-4xl h-[90vh] bg-slate-800 border border-slate-700/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden">
-        
-        <!-- Header -->
-        <div class="bg-slate-900/80 border-b border-slate-700/80 px-6 py-4 flex items-center justify-between backdrop-blur-md">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400">
-                    <i class="fa-solid fa-heart-pulse text-xl"></i>
+    <!-- Sidebar Navigation -->
+    <aside class="hidden md:flex w-72 flex-col glass-panel border-r border-slate-800 p-4 z-20 justify-between">
+        <div class="space-y-6">
+            <!-- Brand -->
+            <div class="flex items-center space-x-3 px-2 pt-2">
+                <div class="w-10 h-10 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shadow-lg shadow-teal-950/50">
+                    <i class="fa-solid fa-heart-pulse text-lg animate-pulse"></i>
                 </div>
                 <div>
-                    <h1 class="text-white font-semibold text-lg leading-tight">Medical AI Assistant</h1>
-                    <p class="text-xs text-slate-400 flex items-center gap-1.5 mt-0.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        RAG Engine Connected
-                    </p>
+                    <h2 class="font-bold text-slate-100 text-base tracking-tight">MedRAG AI</h2>
+                    <p class="text-[11px] text-teal-400 font-medium">Clinical Decision QA</p>
                 </div>
             </div>
-            <div class="text-xs text-slate-400 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700">
-                Medical_book.pdf
+
+            <!-- New Chat Button -->
+            <button onclick="location.reload()" class="w-full bg-teal-600/20 hover:bg-teal-600/30 border border-teal-500/30 text-teal-300 py-2.5 px-4 rounded-xl font-medium text-xs flex items-center justify-center gap-2 transition-all duration-200">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>Start New Session</span>
+            </button>
+
+            <!-- Suggested Medical Prompts -->
+            <div class="space-y-2">
+                <p class="text-[11px] font-semibold text-slate-400 tracking-wider uppercase px-2">Sample Queries</p>
+                <div class="space-y-1.5 text-xs">
+                    <button class="sample-prompt w-full text-left p-2.5 rounded-lg bg-slate-800/40 hover:bg-slate-800/80 border border-slate-700/40 text-slate-300 transition line-clamp-2">
+                        What are the symptoms and initial treatment for Acne Vulgaris?
+                    </button>
+                    <button class="sample-prompt w-full text-left p-2.5 rounded-lg bg-slate-800/40 hover:bg-slate-800/80 border border-slate-700/40 text-slate-300 transition line-clamp-2">
+                        Explain the causes and symptoms of Asthma.
+                    </button>
+                    <button class="sample-prompt w-full text-left p-2.5 rounded-lg bg-slate-800/40 hover:bg-slate-800/80 border border-slate-700/40 text-slate-300 transition line-clamp-2">
+                        What are common preventative measures for hypertension?
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Chat Container -->
-        <div id="chatbox" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 chat-scroll bg-slate-800/50">
+        <!-- Index Badge -->
+        <div class="bg-slate-900/80 border border-slate-800 p-3 rounded-xl flex items-center justify-between text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>Pinecone Index</span>
+            </div>
+            <span class="text-[10px] bg-slate-800 px-2 py-0.5 rounded border border-slate-700 text-slate-300">Active</span>
+        </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 flex flex-col h-full relative">
+        
+        <!-- Header -->
+        <header class="h-16 glass-panel border-b border-slate-800/80 px-6 flex items-center justify-between z-10">
+            <div class="flex items-center gap-3">
+                <div class="md:hidden w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400">
+                    <i class="fa-solid fa-heart-pulse text-sm"></i>
+                </div>
+                <div>
+                    <h1 class="font-semibold text-sm sm:text-base text-slate-100">Medical Knowledge Assistant</h1>
+                    <p class="text-[11px] text-slate-400">Grounded on Medical Literature Knowledge Base</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <span class="text-[11px] bg-teal-950/80 text-teal-300 border border-teal-800/60 px-3 py-1 rounded-full font-medium flex items-center gap-1.5">
+                    <i class="fa-solid fa-bolt text-teal-400 text-[10px]"></i> Groq LPU Accelerated
+                </span>
+            </div>
+        </header>
+
+        <!-- Conversation Scroll Area -->
+        <div id="chatbox" class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 chat-scroll max-w-4xl w-full mx-auto">
             
-            <!-- Welcome Message -->
-            <div class="flex items-start gap-3 max-w-[85%] sm:max-w-[75%]">
-                <div class="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0 mt-1">
-                    <i class="fa-solid fa-robot text-sm"></i>
+            <!-- Welcome Card -->
+            <div class="chat-bubble flex items-start gap-3 max-w-[90%] sm:max-w-[80%]">
+                <div class="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0 mt-0.5 shadow-md">
+                    <i class="fa-solid fa-robot text-xs"></i>
                 </div>
-                <div class="bg-slate-700/60 text-slate-200 border border-slate-600/50 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm leading-relaxed">
-                    Hello! I am your AI Medical Assistant trained on your internal reference materials. How can I assist you today?
+                <div class="bg-slate-900/90 text-slate-200 border border-slate-800 p-4 sm:p-5 rounded-2xl rounded-tl-xs shadow-xl text-sm leading-relaxed space-y-2">
+                    <p class="font-medium text-teal-400 text-xs tracking-wide uppercase">System Ready</p>
+                    <p>Hello! I am your AI Clinical Assistant. Ask me any medical query and I will retrieve context directly from your ingested reference materials.</p>
                 </div>
             </div>
 
         </div>
 
-        <!-- Input Area -->
-        <div class="p-4 bg-slate-900/90 border-t border-slate-700/80">
-            <form id="chat-form" class="flex items-center gap-2">
-                <div class="relative flex-1">
-                    <input type="text" id="user-input" placeholder="Ask a medical question..." autocomplete="off"
-                        class="w-full bg-slate-800 text-white placeholder-slate-400 border border-slate-700 rounded-xl px-4 py-3.5 pr-10 focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition text-sm" required />
-                </div>
-                <button type="submit" id="send-btn"
-                    class="bg-teal-600 hover:bg-teal-500 text-white px-5 py-3.5 rounded-xl font-medium text-sm flex items-center gap-2 transition active:scale-95 disabled:opacity-50">
-                    <span>Send</span>
-                    <i class="fa-solid fa-paper-plane text-xs"></i>
-                </button>
-            </form>
+        <!-- Sticky Input Container -->
+        <div class="p-4 sm:p-6 max-w-4xl w-full mx-auto">
+            <div class="glass-panel p-2 rounded-2xl border border-slate-700/80 shadow-2xl">
+                <form id="chat-form" class="flex items-center gap-2">
+                    <input type="text" id="user-input" placeholder="Type your medical query here..." autocomplete="off"
+                        class="flex-1 bg-transparent text-slate-100 placeholder-slate-500 text-sm px-4 py-2.5 focus:outline-none" required />
+                    <button type="submit" id="send-btn"
+                        class="bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white px-5 py-2.5 rounded-xl font-medium text-xs flex items-center gap-2 transition-all duration-200 active:scale-95 shadow-md shadow-teal-950/40">
+                        <span>Query</span>
+                        <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                    </button>
+                </form>
+            </div>
+            <p class="text-[10px] text-slate-500 text-center mt-2">AI-generated content for informational purposes. Verify clinical results with qualified healthcare providers.</p>
         </div>
 
-    </div>
+    </main>
 
     <script>
         $(document).ready(function() {
             const chatbox = $("#chatbox");
 
             function scrollToBottom() {
-                chatbox.scrollTop(chatbox[0].scrollHeight);
+                chatbox.animate({ scrollTop: chatbox[0].scrollHeight }, 300);
             }
 
+            function getTime() {
+                const now = new Date();
+                return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            // Sample Prompt Click Handler
+            $(".sample-prompt").on("click", function() {
+                $("#user-input").val($(this).text().trim());$("#chat-form").submit();
+            });
+
+            // Form Submit Handler
             $("#chat-form").on("submit", function(e) {
                 e.preventDefault();
                 const inputField = $("#user-input");
                 const userMsg = inputField.val().trim();
                 if (!userMsg) return;
 
-                // Append User Message
+                // User Message Render
                 const userHtml = `
-                    <div class="flex items-start justify-end gap-3 max-w-[85%] sm:max-w-[75%] ml-auto">
-                        <div class="bg-teal-600 text-white p-4 rounded-2xl rounded-tr-none shadow-sm text-sm leading-relaxed">
-                            ${escapeHtml(userMsg)}
+                    <div class="chat-bubble flex items-start justify-end gap-3 max-w-[90%] sm:max-w-[80%] ml-auto">
+                        <div class="space-y-1 text-right">
+                            <div class="bg-teal-600 text-slate-50 p-4 rounded-2xl rounded-tr-xs shadow-lg text-sm leading-relaxed">
+                                ${escapeHtml(userMsg)}
+                            </div>
+                            <span class="text-[10px] text-slate-500 px-1">${getTime()}</span>
                         </div>
-                        <div class="w-8 h-8 rounded-lg bg-teal-500 flex items-center justify-center text-white shrink-0 mt-1 shadow-md">
-                            <i class="fa-solid fa-user text-sm"></i>
+                        <div class="w-8 h-8 rounded-xl bg-teal-500 flex items-center justify-center text-white shrink-0 mt-0.5 shadow-md">
+                            <i class="fa-solid fa-user text-xs"></i>
                         </div>
                     </div>
                 `;
@@ -110,36 +229,46 @@
                 inputField.val("");
                 scrollToBottom();
 
-                // Append Typing Indicator
+                // Typing Loading Indicator Render
                 const loadingId = "loading-" + Date.now();
                 const loadingHtml = `
-                    <div id="${loadingId}" class="flex items-start gap-3 max-w-[85%] sm:max-w-[75%]">
-                        <div class="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0 mt-1">
-                            <i class="fa-solid fa-robot text-sm"></i>
+                    <div id="${loadingId}" class="chat-bubble flex items-start gap-3 max-w-[90%] sm:max-w-[80%]">
+                        <div class="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0 mt-0.5">
+                            <i class="fa-solid fa-robot text-xs"></i>
                         </div>
-                        <div class="bg-slate-700/60 text-slate-300 border border-slate-600/50 p-4 rounded-2xl rounded-tl-none text-sm flex items-center gap-2">
-                            <span class="text-xs text-slate-400">Searching medical database...</span>
-                            <i class="fa-solid fa-circle-notch animate-spin text-teal-400 text-xs"></i>
+                        <div class="bg-slate-900/90 text-slate-300 border border-slate-800 p-4 rounded-2xl rounded-tl-xs text-xs flex items-center gap-3">
+                            <i class="fa-solid fa-circle-notch animate-spin text-teal-400 text-sm"></i>
+                            <span>Retrieving vector embeddings & synthesizing answer...</span>
                         </div>
                     </div>
                 `;
                 chatbox.append(loadingHtml);
                 scrollToBottom();
 
-                // Send AJAX Request to Flask
+                // Send AJAX Request
                 $.ajax({
                     data: { msg: userMsg },
                     type: "POST",
                     url: "/get",
                 }).done(function(data) {
                     $(`#${loadingId}`).remove();
+                    const parsedMarkdown = marked.parse(data);
+                    const msgId = "msg-" + Date.now();
+
                     const botHtml = `
-                        <div class="flex items-start gap-3 max-w-[85%] sm:max-w-[75%]">
-                            <div class="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 flex items-center justify-center text-teal-400 shrink-0 mt-1">
-                                <i class="fa-solid fa-robot text-sm"></i>
+                        <div class="chat-bubble flex items-start gap-3 max-w-[90%] sm:max-w-[80%]">
+                            <div class="w-8 h-8 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-center text-teal-400 shrink-0 mt-0.5 shadow-md">
+                                <i class="fa-solid fa-robot text-xs"></i>
                             </div>
-                            <div class="bg-slate-700/60 text-slate-100 border border-slate-600/50 p-4 rounded-2xl rounded-tl-none shadow-sm text-sm leading-relaxed">
-                                ${escapeHtml(data)}
+                            <div class="space-y-1">
+                                <div class="bg-slate-900/90 text-slate-100 border border-slate-800 p-4 sm:p-5 rounded-2xl rounded-tl-xs shadow-xl text-sm leading-relaxed relative group">
+                                    <div id="${msgId}">${parsedMarkdown}</div>
+                                    <button onclick="copyToClipboard('${msgId}')" title="Copy response" 
+                                        class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 text-slate-400 hover:text-teal-400 transition text-xs p-1">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                </div>
+                                <span class="text-[10px] text-slate-500 px-1">${getTime()}</span>
                             </div>
                         </div>
                     `;
@@ -148,12 +277,12 @@
                 }).fail(function() {
                     $(`#${loadingId}`).remove();
                     const errorHtml = `
-                        <div class="flex items-start gap-3 max-w-[85%] sm:max-w-[75%]">
-                            <div class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 shrink-0 mt-1">
-                                <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                        <div class="chat-bubble flex items-start gap-3 max-w-[90%] sm:max-w-[80%]">
+                            <div class="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 shrink-0 mt-0.5">
+                                <i class="fa-solid fa-triangle-exclamation text-xs"></i>
                             </div>
-                            <div class="bg-rose-950/40 text-rose-200 border border-rose-800/50 p-4 rounded-2xl rounded-tl-none text-sm">
-                                Failed to retrieve response. Please check your connection or server logs.
+                            <div class="bg-rose-950/30 text-rose-300 border border-rose-900/50 p-4 rounded-2xl rounded-tl-xs text-xs">
+                                Failed to retrieve response. Verify your local Flask server or Groq/Pinecone key configuration.
                             </div>
                         </div>
                     `;
@@ -171,6 +300,13 @@
                     .replace(/'/g, "&#039;");
             }
         });
+
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Response copied to clipboard!");
+            });
+        }
     </script>
 </body>
 </html>
